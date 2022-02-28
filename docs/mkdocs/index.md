@@ -5,7 +5,7 @@
 
 
 This package provides utilities to watch for IO activities of Unix processes. Applications
-can use it to reduce the updating website static pages.
+can use it to reduce updating website static pages.
 
 An example use case is a microserver that displays a list of recently modified files that
 have not been checked into a revision control system. A sensible implementation will be to

@@ -27,7 +27,7 @@ build-pkg:
 	@python3 -m build
 	@ls -lh dist
 
-build: build-docs build-pkg
+build: build-pkg
 
 sum:
 	git status
