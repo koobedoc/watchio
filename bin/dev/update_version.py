@@ -34,7 +34,7 @@ class UpdateVersion:
                         patch += 1
                         print(f'"{major}.{minor}.{patch}"')
                         lines.append(f'__version__ = "{major}.{minor}.{patch}"')
-                    elif mrx := re.search(r'^\s*__built__\s*=\s*"([\w :])+\"\s*$', line):
+                    elif mrx := re.search(r'^\s*__build__\s*=\s*"([\w :])+\"\s*$', line):
                         lines.append(f'__build__ = "{time.asctime()} {time.tzname[0]}"')
                     else:
                         lines.append(line)

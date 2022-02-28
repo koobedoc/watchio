@@ -1,7 +1,7 @@
 # Watchio
 
 !!! warning
-    Not developed or released. No commitment to complete :)
+    Work in progress. Have not reached the stable release 0.1.0
 
 
 This package provides utilities to watch for IO activities of Unix processes. Applications

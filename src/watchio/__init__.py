@@ -5,7 +5,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.5"
+__version__ = "0.0.11"
+__build__ = "Sun Feb 27 22:57:33 2022 PST"
 
 
 class WatchIO:
