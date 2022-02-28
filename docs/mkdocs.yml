@@ -1,8 +1,19 @@
-site_name: Wedipy&mdash;Web Editor In Python
+site_name: Watchio
+
+repo_name: github
+
+
 theme:
     name: material
+
 docs_dir: mkdocs
+
 markdown_extensions:
     - def_list
+    - attr_list
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
+
 extra:
     generator: false
