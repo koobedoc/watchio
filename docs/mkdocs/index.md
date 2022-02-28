@@ -13,6 +13,12 @@ update static pages when people are viewing the results. The `watchio` module he
 implement the viewing part when the creation process involves a separate program.
 
 
+## How it works
+
+The program reads in the process information file `/proc/<pid>/io` periodically and detect
+changes.
+
+
 ## Installation
 
 
