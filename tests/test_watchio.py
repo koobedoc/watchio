@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Test for watchio module """
+""" Tests for watchio module """
 
 import os
 import time
@@ -15,6 +15,7 @@ import watchio
 def test_constructor():
     """Tests for constructor"""
 
+    ## Checks defaults
     iow = watchio.WatchIO([1])
     assert str(iow) == "<WatchIO pids=[1] timeout=600 step=1>"
 
