@@ -5,6 +5,7 @@
 
 ## Installation
 
+
 Install the package from `pypi.org` by
 
     pip install watchio
