@@ -1,0 +1,8 @@
+site_name: Wedipy&mdash;Web Editor In Python
+theme:
+    name: material
+docs_dir: mkdocs
+markdown_extensions:
+    - def_list
+extra:
+    generator: false
