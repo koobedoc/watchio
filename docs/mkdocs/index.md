@@ -53,3 +53,9 @@ watchio 123 456 --timeout 600 --step 10
 ./update_script.csh
 ```
 
+
+## Development
+
+
+* On github: [https://github.com/koobedoc/watchio](https://github.com/koobedoc/watchio)
+* On PyPI: [https://pypi.org/project/watchio/](https://pypi.org/project/watchio/)
