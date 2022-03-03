@@ -48,7 +48,7 @@ h4.class-method {
 :   Parse Unix command line arguments
 
 
-####poll (self, timeout: float = None, step: float = None) -> int #### {: .anchor .class-method  data-toc-label='poll' }
+####poll (self, timeout: float = None, step: float = None, clear=False) -> int #### {: .anchor .class-method  data-toc-label='poll' }
 :   Poll the IO activities. The method checks for IO activities every
     `step` seconds. It returns the number of processes with new IO
     activities since the last update() or poll(); or returns 0 if
@@ -57,6 +57,9 @@ h4.class-method {
     *timeout* defaults to instance value if not given.
 
     *step* defaults to instance value if not given.
+
+    *clear* (default is False) clears the IO counters so that polling uses
+    only IO activities after this function has started.
 
 
 ####update (self) -> int #### {: .anchor .class-method  data-toc-label='update' }

@@ -83,7 +83,7 @@ class WatchIO:
     # def dump(self):
     #    """Dump out current states for debugging"""
 
-    def poll(self, timeout: float = None, step: float = None) -> int:
+    def poll(self, timeout: float = None, step: float = None, clear=False) -> int:
         """
         Poll the IO activities. The method checks for IO activities every
         `step` seconds. It returns the number of processes with new IO
@@ -93,6 +93,9 @@ class WatchIO:
         *timeout* defaults to instance value if not given.
 
         *step* defaults to instance value if not given.
+
+        *clear* (default is False) clears the IO counters so that polling uses
+        only IO activities after this function has started.
         """
 
         if timeout is None:  ## Use instance value
@@ -100,6 +103,9 @@ class WatchIO:
         if step is None:  ## Use instance value
             step = self.step
         step = max(0.1, step)
+
+        if clear:
+            self.update()
 
         start_time = time.time()
         elapsed = 0

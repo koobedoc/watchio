@@ -5,7 +5,9 @@
 
 
 This package provides utilities to watch for IO activities of Unix processes. It works by
-reading the Unix process information file `/proc/{pid}/io` periodically.
+reading the Unix process information file `/proc/{pid}/io` periodically. Therefore, you
+can only use it on a system where `/proc` is mounted, and for processes you have tracing
+access to.
 
 An example use case is a microserver that displays static web pages created by a different
 program that takes a moderate amount of resources. A sensible implementation will be to
@@ -54,6 +56,7 @@ watchio poll 1234 2234 --timeout 3600 --kill
 
 ## See Also
 
+* [proc file system man page](https://man7.org/linux/man-pages/man5/proc.5.html)
 * [iostat man page](https://linux.die.net/man/1/iostat)
 * Code on github: [https://github.com/koobedoc/watchio](https://github.com/koobedoc/watchio)
 * Package on PyPI: [https://pypi.org/project/watchio/](https://pypi.org/project/watchio/)
