@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ watchio: Process IO watcher """
 
+import argparse
 import pathlib
 import os
 import time
@@ -9,23 +10,28 @@ __version__ = "0.0.12"
 __build__ = "Sun Feb 27 23:08:39 2022 PST"
 
 
+""" Where is this stored in inspect?"""
+
+
 class WatchIO:
     """
     Process IO watcher
     """
 
-    def __init__(self, pids: list = None, timeout=600, step=1):
+    def __init__(self, pids: list = None, *, timeout: float=600, step:float=1):
         """
         Constructor for WatchIO, call with keyword arguments.
 
-        `pids` is a list of process PIDs to watch. Non-valid PIDs are silently
+        *pids* is a list of process PIDs to watch. Non-valid PIDs are silently
         ignored.
 
-        `timeout` sets the default value for poll() methed.
+        *timeout* sets the default timeout value for the poll() methed.
 
-        `step` sets the default step value in seconds for the poll() method.
+        *step* sets the default step value, the interval we check
+        the /proc/ file, in seconds for the poll() method.
 
         """
+        self.args = argparse.Namespace(verbose=0)
         self.timeout = timeout
         self.step = step
         self.pids = pids if pids else []
@@ -34,11 +40,13 @@ class WatchIO:
 
     def get_io_data(self, pid: int) -> dict:
         """
-        Get IO data from the /proc file system. The method reads and parses the
-        file "/proc/<pid>/io" and returns a dictionary with values in int.
+        Get IO data of the `pid` process. The method reads and parses the
+        file "/proc/{pid}/io" and returns a dictionary with values in int.
+        See https://man7.org/linux/man-pages/man5/proc.5.html for the definition
+        of values.
 
-        `pid` is the process ID to get the io data. The method returns None
-        is the process does not exist. TODO: no read access.
+        *pid* is the process ID to get the io data. The method returns None
+        if the process does not exist. TODO: no read access.
         """
         _ = self
         filename = f"/proc/{pid}/io"
@@ -59,9 +67,10 @@ class WatchIO:
 
         return data
 
-    def update(self):
+    def update(self) -> int:
         """
-        Update IO activities. Returns the number of process with new IO activities.
+        Update IO activities. Returns the number of process with new IO activities
+        since the last update() or poll().
         """
         changes = 0
         for pid in self.pids:
@@ -77,26 +86,62 @@ class WatchIO:
     # def dump(self):
     #    """Dump out current states for debugging"""
 
-    def poll(self, timeout: int = None, step: int = None) -> int:
+    def poll(self, timeout: float = None, step: float = None) -> int:
         """
-        Poll the IO activities. The method returns where there are new IO activities or
-        if the wait time has exceeded `timeout` seconds. It checks the IO acitiviies
-        every `step` seconds. Returns 0 if timeout, or the number of processes with
-        new IO activities.
+        Poll the IO activities. The method checks for IO activities every
+        `step` seconds. It returns the number of processes with new IO
+        activities since the last update() or poll(); or returns 0 if
+        the wait time has exceeded `timeout` seconds.
 
-        `timeout` for waiting. Defaults to instance value if not given.
+        *timeout* defaults to instance value if not given.
 
-        `step` for internal checking internval. Defaults to instance value if not given.
+        *step* defaults to instance value if not given.
         """
 
         if timeout is None:  ## Use instance value
             timeout = self.timeout
         if step is None:  ## Use instance value
             step = self.step
+        step = max(0.1, step)
 
-        for _ in range(timeout):
+        start_time = time.time()
+        elapsed = 0
+        while elapsed <= timeout:
             if changes := self.update():
                 return changes
-            time.sleep(1)
+            ## Bound step to a reasonable value
+            if step > (timeout/100):
+                step = timeout / 100
+            if step < 10:
+                step = max(0.1, elapsed/100, step)
+        
+            time.sleep(step)
+            elapsed = time.time() - start_time
+            # step = max(step, elapsed/10)
+            
 
         return 0
+
+    def parse_cli(self):
+        """Parse Unix command line arguments"""
+        parser = argparse.ArgumentParser(description="Process some integers.")
+        parser.add_argument("files", metavar="file", nargs="*", help="Files or directories")
+        parser.add_argument("-l", "--longs", action="store_true", help="use a long listing format")
+        parser.add_argument("-v", "--verbose", action="count", default=0, help="increase verbosity for debugging")
+        parser.add_argument("-1", "--one", action="count", default=0, help="increase verbosity for debugging")
+        parser.add_argument("--formats", type=str, help="Format string")
+        parser.add_argument("--stdin", action="store_true", help="accept file arguments from input")
+        parser.add_argument("--humanize", action="store_true", help="humanize output")
+        parser.add_argument("--man", action="store_true", help="display man page")
+
+        self.args = parser.parse_args()
+        if self.args.verbose:
+            # print(f"lsutil ver. {__init__.__version__}, {__init__.__built__}")
+            print(self.args)
+
+    @staticmethod
+    def main_cli():
+        """Unix command line interface"""
+        self = WatchIO()
+        self.parse_cli()
+        # self.ls(self.args.files, longs=self.args.longs, one=self.args.one, formats=self.args.formats)

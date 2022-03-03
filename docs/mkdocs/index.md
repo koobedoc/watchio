@@ -4,23 +4,13 @@
     Work in progress. Have not reached the stable release 0.1.0
 
 
-This package provides utilities to watch for IO activities of Unix processes. Applications
-can use it to reduce updates to website static pages.
+This package provides utilities to watch for IO activities of Unix processes. It works by
+reading the Unix process information file `/proc/{pid}/io` periodically.
 
-An example use case is a microserver that displays a list of recently modified files that
-have not been checked into a revision control system. A sensible implementation will be to
-update static pages when users are viewing the results. The `watchio` module helps to
-implement the viewing part when the creation process involves a separate program.
-
-
-## How it works
-
-The program reads in the process information file `/proc/<pid>/io` periodically and detect
-changes.
-
-
-## Installation
-
+An example use case is a microserver that displays static web pages created by a different
+program that takes a moderate amount of resources. A sensible implementation will be to
+update the static pages only when users are viewing the results. The `watchio` module
+helps to watch for IO activities of the server.
 
 Install the package from `pypi.org` by
 ``` python
@@ -29,6 +19,8 @@ pip install watchio
 
 
 ## Usage
+
+### In Python
 
 Use in a polling loop in code:
 
@@ -46,12 +38,19 @@ while True:
 ```
 
 
-On the command line:
+### On the command line
 
 ``` shell
-watchio 123 456 --timeout 600 --step 10
+watchio 1234 2234 --timeout 600 --step 10
 ./update_script.csh
 ```
+
+
+The following kills a butch of processes that has no IO activities after 1 hour.
+``` shell
+watchio 1234 2234--timeout 3600 --kill
+```
+
 
 
 ## Development

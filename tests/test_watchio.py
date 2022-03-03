@@ -37,9 +37,10 @@ def test_delay():
     print("// Now we run again. It should timeout")
     iow.update()  ### To flush out changes print print statments
     start_time = time.time()
-    ret = iow.poll(timeout=1, step=1)
-    print(f"// Returned {ret}. Elapsed = {time.time() - start_time:.3f}s")
-    assert (time.time() - start_time) >= 1
+    ret = iow.poll(timeout=0.2, step=0.1)
+    elapsed = time.time() - start_time
+    print(f"// Returned {ret}. Elapsed = {elapsed:.3f}s")
+    assert 0.2 < elapsed < 0.3
 
 
 def test_misc():
