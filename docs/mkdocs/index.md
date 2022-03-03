@@ -41,14 +41,14 @@ while True:
 ### On the command line
 
 ``` shell
-watchio 1234 2234 --timeout 600 --step 10
+watchio poll 1234 2234 --timeout 600 --step 10
 ./update_script.csh
 ```
 
 
 The following kills a butch of processes that has no IO activities after 1 hour.
 ``` shell
-watchio 1234 2234--timeout 3600 --kill
+watchio poll 1234 2234 --timeout 3600 --kill
 ```
 
 

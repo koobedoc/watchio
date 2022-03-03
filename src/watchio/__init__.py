@@ -6,11 +6,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.12"
-__build__ = "Sun Feb 27 23:08:39 2022 PST"
-
-
-""" Where is this stored in inspect?"""
+__version__ = "0.0.23"
+__build__ = "Wed Mar  2 21:27:04 2022 PST"
 
 
 class WatchIO:
@@ -18,7 +15,7 @@ class WatchIO:
     Process IO watcher
     """
 
-    def __init__(self, pids: list = None, *, timeout: float=600, step:float=1):
+    def __init__(self, pids: list = None, *, timeout: float = 600, step: float = 1):
         """
         Constructor for WatchIO, call with keyword arguments.
 
@@ -110,33 +107,27 @@ class WatchIO:
             if changes := self.update():
                 return changes
             ## Bound step to a reasonable value
-            if step > (timeout/100):
+            if step > (timeout / 100):
                 step = timeout / 100
             if step < 10:
-                step = max(0.1, elapsed/100, step)
-        
+                step = max(0.1, elapsed / 100, step)
+
             time.sleep(step)
             elapsed = time.time() - start_time
             # step = max(step, elapsed/10)
-            
 
         return 0
 
     def parse_cli(self):
         """Parse Unix command line arguments"""
-        parser = argparse.ArgumentParser(description="Process some integers.")
-        parser.add_argument("files", metavar="file", nargs="*", help="Files or directories")
-        parser.add_argument("-l", "--longs", action="store_true", help="use a long listing format")
+        parser = argparse.ArgumentParser(description="Unix process IO activities watcher.")
+        parser.add_argument("command", type=str, help="Command")
+        parser.add_argument("pids", nargs="+", help="Unix process IDs")
+
         parser.add_argument("-v", "--verbose", action="count", default=0, help="increase verbosity for debugging")
-        parser.add_argument("-1", "--one", action="count", default=0, help="increase verbosity for debugging")
-        parser.add_argument("--formats", type=str, help="Format string")
-        parser.add_argument("--stdin", action="store_true", help="accept file arguments from input")
-        parser.add_argument("--humanize", action="store_true", help="humanize output")
-        parser.add_argument("--man", action="store_true", help="display man page")
 
         self.args = parser.parse_args()
         if self.args.verbose:
-            # print(f"lsutil ver. {__init__.__version__}, {__init__.__built__}")
             print(self.args)
 
     @staticmethod
@@ -144,4 +135,8 @@ class WatchIO:
         """Unix command line interface"""
         self = WatchIO()
         self.parse_cli()
-        # self.ls(self.args.files, longs=self.args.longs, one=self.args.one, formats=self.args.formats)
+        print("// watchio: TBD")
+
+
+if __name__ == "__main__":
+    WatchIO.main_cli()
