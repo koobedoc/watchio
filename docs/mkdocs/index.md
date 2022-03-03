@@ -52,9 +52,8 @@ watchio 1234 2234--timeout 3600 --kill
 ```
 
 
+## See Also
 
-## Development
-
-
-* On github: [https://github.com/koobedoc/watchio](https://github.com/koobedoc/watchio)
-* On PyPI: [https://pypi.org/project/watchio/](https://pypi.org/project/watchio/)
+* [iostat man page](https://linux.die.net/man/1/iostat)
+* Code on github: [https://github.com/koobedoc/watchio](https://github.com/koobedoc/watchio)
+* Package on PyPI: [https://pypi.org/project/watchio/](https://pypi.org/project/watchio/)
