@@ -6,8 +6,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.28"
-__build__ = "Thu Mar  3 23:17:01 2022 PST"
+__version__ = "0.0.29"
+__build__ = "Thu Mar  3 23:25:15 2022 PST"
 
 
 class WatchIO:

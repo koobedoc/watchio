@@ -34,7 +34,7 @@ h4.class-method {
 :   Get IO data of the `pid` process. The method reads and parses the
     file "/proc/{pid}/io" and returns a dictionary with values in int.
     See https://www.kernel.org/doc/html/latest/filesystems/proc.html#proc-pid-io-display-the-io-accounting-fields
-    for a description of the fields.  [https://abc.com/foo.html](https://abc.com/foo.html)
+    for a description of the fields.
 
     *pid* is the process ID to get the io data. The method returns None
     if the process does not exist. TODO: no read access.
