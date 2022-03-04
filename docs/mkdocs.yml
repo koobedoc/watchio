@@ -16,4 +16,7 @@ markdown_extensions:
     - pymdownx.superfences
 
 extra:
-    generator: false
+  generator: false
+  analytics:
+    provider: google
+    property: G-BNH3BTJ9ME
