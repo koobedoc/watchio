@@ -6,8 +6,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.29"
-__build__ = "Thu Mar  3 23:25:15 2022 PST"
+__version__ = "0.0.30"
+__build__ = "Fri Mar  4 01:49:31 2022 PST"
 
 
 class WatchIO:
@@ -15,22 +15,23 @@ class WatchIO:
     Process IO watcher.
     """
 
-    def __init__(self, pids: list = None, *, timeout: float = 600, step: float = 1):
+    def __init__(self, pids: list = None, *, timeout: float = 600, step: float = 1, check=False):
         """
         Constructor for WatchIO, call with keyword arguments.
 
         *pids* is a list of process PIDs to watch. Non-valid PIDs are silently
         ignored.
 
-        *timeout* sets the default timeout value for the poll() methed.
+        *timeout* sets the default timeout value for the poll() method.
 
         *step* sets the default step value, the interval we check
-        the /proc/ file, in seconds for the poll() method.
+        the /proc/{pid}/io file, in seconds for the poll() method.
 
         """
         self.args = argparse.Namespace(verbose=0)
         self.timeout = timeout
         self.step = step
+        self.check = check
         self.pids = pids if pids else []
         self.procs = {}
         self.pid_self = os.getpid()
@@ -45,13 +46,18 @@ class WatchIO:
         *pid* is the process ID to get the io data. The method returns None
         if the process does not exist. TODO: no read access.
         """
-        _ = self
         filename = f"/proc/{pid}/io"
         if not os.path.isfile(filename):
             return None
 
         data = {}
-        text = pathlib.Path(filename).read_text(encoding="ascii")
+        try:
+            text = pathlib.Path(filename).read_text(encoding="ascii")
+        except Exception as err:
+            if self.check:
+                raise err
+            return None
+
         for line in text.split("\n"):
             if line:
                 key, value = line.split(":", 1)
@@ -67,15 +73,19 @@ class WatchIO:
     def update(self) -> int:
         """
         Update IO activities. Returns the number of process with new IO activities
-        since the last update() or poll().
+        since the last update() or poll(). Returns -1 if no PID is valid.
         """
         changes = 0
+        valid = 0
         for pid in self.pids:
             data = self.get_io_data(pid)
-            if data and data != self.procs.get(pid, {}):  # Has changed
-                self.procs[pid] = data
-                changes += 1
-        return changes
+            if data:
+                valid += 1
+                if data != self.procs.get(pid, {}):  # Has changed
+                    self.procs[pid] = data
+                    changes += 1
+
+        return changes if valid else -1
 
     def __str__(self):
         return f"<WatchIO pids={self.pids} timeout={self.timeout} step={self.step}>"

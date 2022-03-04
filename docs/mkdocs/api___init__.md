@@ -18,16 +18,16 @@ h4.class-method {
 :   Process IO watcher.
 
 
-#### \_\_init\_\_ (self, pids: list = None, *, timeout: float = 600, step: float = 1) #### {: .anchor .class-method  data-toc-label='\_\_init\_\_' }
+#### \_\_init\_\_ (self, pids: list = None, *, timeout: float = 600, step: float = 1, check=False) #### {: .anchor .class-method  data-toc-label='\_\_init\_\_' }
 :   Constructor for WatchIO, call with keyword arguments.
 
     *pids* is a list of process PIDs to watch. Non-valid PIDs are silently
     ignored.
 
-    *timeout* sets the default timeout value for the poll() methed.
+    *timeout* sets the default timeout value for the poll() method.
 
     *step* sets the default step value, the interval we check
-    the /proc/ file, in seconds for the poll() method.
+    the /proc/{pid}/io file, in seconds for the poll() method.
 
 
 #### get\_io\_data (self, pid: int) -> dict #### {: .anchor .class-method  data-toc-label='get\_io\_data' }
@@ -64,7 +64,7 @@ h4.class-method {
 
 #### update (self) -> int #### {: .anchor .class-method  data-toc-label='update' }
 :   Update IO activities. Returns the number of process with new IO activities
-    since the last update() or poll().
+    since the last update() or poll(). Returns -1 if no PID is valid.
 
 
 

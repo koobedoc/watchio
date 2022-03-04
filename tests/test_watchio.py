@@ -43,16 +43,43 @@ def test_delay():
     assert 0.2 < elapsed < 0.3
 
 
-def test_misc():
+def test_exception():
+    """Test for exception cases"""
+
+    print("// Polling not-accesible or non-existent process should return immediately")
+    start_time = time.time()
+    watcher = watchio.WatchIO([1])
+    watcher.poll()
+    watcher = watchio.WatchIO([1, 2, 3, 4])
+    watcher.poll()
+    watcher = watchio.WatchIO([1, 2, 3, 999999])
+    watcher.poll()
+    elapsed = time.time() - start_time
+    assert elapsed < 0.1
+
+
+def test_get_io_data():
     """Misc tests"""
 
+    watcher = watchio.WatchIO([os.getpid()])
+    data = watcher.get_io_data(os.getpid())
+    assert list(data.keys()) == [
+        "rchar",
+        "wchar",
+        "syscr",
+        "syscw",
+        "read_bytes",
+        "write_bytes",
+        "cancelled_write_bytes",
+    ]
+    ## Non-accessible or non-existent
+    assert None == watchio.WatchIO().get_io_data(1)
+    assert None == watchio.WatchIO().get_io_data(9999999)
+
+def test_misc():
+
     print("dir(watchio):", dir(watchio))
-
     print(watchio.__version__)
-
-    iow = watchio.WatchIO([os.getpid()])
-    data1 = iow.get_io_data(os.getpid())
-    print(data1)
 
 
 if __name__ == "__main__":
