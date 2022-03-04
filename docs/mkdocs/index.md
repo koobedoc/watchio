@@ -9,10 +9,10 @@ reading the Unix process information file `/proc/{pid}/io` periodically. Therefo
 can only use it on a system where `/proc` is mounted, and for processes you have tracing
 access to.
 
-An example use case is a microserver that displays static web pages created by a different
-program that takes a moderate amount of resources. A sensible implementation will be to
-update the static pages only when users are viewing the results. The `watchio` module
-helps to watch for IO activities of the server.
+An example use case is a microserver displaying static web pages created by a separate
+program that takes a moderate amount of resources. A sensible implementation is to update
+the static pages only when users are viewing the results. The `watchio` module helps to
+watch for IO activities of the server.
 
 Install the package from `pypi.org` by
 ``` python
@@ -47,12 +47,12 @@ watchio poll 1234 2234 --timeout 600 --step 10
 ./update_script.csh
 ```
 
-
+<!-
 The following kills a butch of processes that has no IO activities after 1 hour.
 ``` shell
 watchio poll 1234 2234 --timeout 3600 --kill
 ```
-
+->
 
 ## See Also
 

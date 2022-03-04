@@ -6,13 +6,13 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.23"
-__build__ = "Wed Mar  2 21:27:04 2022 PST"
+__version__ = "0.0.24"
+__build__ = "Thu Mar  3 22:27:45 2022 PST"
 
 
 class WatchIO:
     """
-    Process IO watcher
+    Process IO watcher.
     """
 
     def __init__(self, pids: list = None, *, timeout: float = 600, step: float = 1):
@@ -39,8 +39,8 @@ class WatchIO:
         """
         Get IO data of the `pid` process. The method reads and parses the
         file "/proc/{pid}/io" and returns a dictionary with values in int.
-        See https://man7.org/linux/man-pages/man5/proc.5.html for the definition
-        of values.
+        See https://www.kernel.org/doc/html/latest/filesystems/proc.html#proc-pid-io-display-the-io-accounting-fields
+        for a description of the fields. https://abc.com/foo.html
 
         *pid* is the process ID to get the io data. The method returns None
         if the process does not exist. TODO: no read access.
@@ -127,8 +127,10 @@ class WatchIO:
     def parse_cli(self):
         """Parse Unix command line arguments"""
         parser = argparse.ArgumentParser(description="Unix process IO activities watcher.")
-        parser.add_argument("command", type=str, help="Command")
+        parser.add_argument("command", choices=("poll",), help="Command")
         parser.add_argument("pids", nargs="+", help="Unix process IDs")
+        parser.add_argument("--timeout", type=float, help="timeout in seconds")
+        parser.add_argument("--step", type=float, help="internal polling step in seconds")
 
         parser.add_argument("-v", "--verbose", action="count", default=0, help="increase verbosity for debugging")
 
@@ -141,7 +143,9 @@ class WatchIO:
         """Unix command line interface"""
         self = WatchIO()
         self.parse_cli()
-        print("// watchio: TBD")
+        print(f"// watchio: {self}")
+        self.pids = self.args.pids
+        self.poll(timeout=self.args.timeout, step=self.args.timeout, clear=True)
 
 
 if __name__ == "__main__":
