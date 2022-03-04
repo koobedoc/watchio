@@ -1,5 +1,17 @@
 # Watchio
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BNH3BTJ9ME"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BNH3BTJ9ME');
+</script>
+
+
 !!! warning
     Work in progress. Have not reached the stable release 0.1.0
 
