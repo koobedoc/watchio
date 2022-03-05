@@ -7,10 +7,10 @@
     Work in progress. Have not reached the stable release 0.1.0
 
 
-This package provides utilities to watch for IO activities of Unix processes. It works by
-reading the Unix process information file `/proc/{pid}/io` periodically. Therefore, you
-can only use it on a system where `/proc` is mounted, and for processes you have tracing
-access to.
+The `watchio` package provides utilities to watch for IO activities of Unix processes. It
+works by reading the Unix process information file `/proc/{pid}/io` periodically.
+Therefore, you can only use it on a system where `/proc` is mounted, and for processes you
+have tracing access to.
 
 An example use case is a microserver displaying static web pages created by a separate
 program that takes a moderate amount of resources. A sensible implementation is to update
