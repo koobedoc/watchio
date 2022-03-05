@@ -6,8 +6,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.31"
-__build__ = "Fri Mar  4 02:06:37 2022 PST"
+__version__ = "0.0.32"
+__build__ = "Fri Mar  4 23:47:28 2022 PST"
 
 
 class WatchIO:
@@ -153,7 +153,8 @@ class WatchIO:
         """Unix command line interface"""
         self = WatchIO()
         self.parse_cli()
-        print(f"// watchio: {self}")
+        if self.args.verbose:
+            print(f"// watchio: {self}")
         self.pids = self.args.pids
         self.poll(timeout=self.args.timeout, step=self.args.timeout, clear=True)
 
