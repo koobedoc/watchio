@@ -20,12 +20,15 @@ class WatchIO:
         Constructor for WatchIO, call with keyword arguments.
 
         *pids* is a list of process PIDs to watch. Non-valid PIDs are silently
-        ignored.
+        ignored unless `check` is enabled.
 
         *timeout* sets the default timeout value for the poll() method.
 
         *step* sets the default step value, the interval we check
         the /proc/{pid}/io file, in seconds for the poll() method.
+
+        *check* raises exceptions (PermissionError if not accessible or FileNotFoundError for
+        non-existent process) instead of silently ignoring bad pids by default.
 
         """
         self.args = argparse.Namespace(verbose=0)
@@ -47,8 +50,8 @@ class WatchIO:
         if the process does not exist. TODO: no read access.
         """
         filename = f"/proc/{pid}/io"
-        if not os.path.isfile(filename):
-            return None
+        # if not os.path.isfile(filename):
+        #    return None
 
         data = {}
         try:

@@ -57,9 +57,28 @@ def test_exception():
     elapsed = time.time() - start_time
     assert elapsed < 0.1
 
+    print(
+        "// Polling not-accesible or non-existent process should raise exceptions when check=True"
+    )
+    start_time = time.time()
+    watcher = watchio.WatchIO([1], check=True)
+    with pytest.raises(PermissionError):
+        watcher.poll()
+    watcher = watchio.WatchIO([1, 999999], check=True)
+    with pytest.raises(PermissionError):
+        watcher.poll()
+    watcher = watchio.WatchIO([999999], check=True)
+    with pytest.raises(FileNotFoundError):
+        watcher.poll()
+    watcher = watchio.WatchIO([999999, 1], check=True)
+    with pytest.raises(FileNotFoundError):
+        watcher.poll()
+    elapsed = time.time() - start_time
+    assert elapsed < 0.1
+
 
 def test_get_io_data():
-    """Misc tests"""
+    """Checks test_get_io_data()"""
 
     watcher = watchio.WatchIO([os.getpid()])
     data = watcher.get_io_data(os.getpid())
@@ -72,11 +91,14 @@ def test_get_io_data():
         "write_bytes",
         "cancelled_write_bytes",
     ]
+
     ## Non-accessible or non-existent
-    assert None == watchio.WatchIO().get_io_data(1)
-    assert None == watchio.WatchIO().get_io_data(9999999)
+    assert watchio.WatchIO().get_io_data(1) is None
+    assert watchio.WatchIO().get_io_data(9999999) is None
+
 
 def test_misc():
+    """Misc test"""
 
     print("dir(watchio):", dir(watchio))
     print(watchio.__version__)
