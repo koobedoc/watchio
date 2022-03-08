@@ -1,12 +1,5 @@
 # Watchio
 
-
-
-
-!!! warning
-    Work in progress. Have not reached the stable release 0.1.0
-
-
 The `watchio` package provides utilities to watch for IO activities of Unix processes. It
 works by reading the Unix process information file `/proc/{pid}/io` periodically. You can
 only use it on a system where `/proc` is mounted, and for processes you have tracing
@@ -33,9 +26,9 @@ watcher = watchio.WatchIO([123, 456])
 ## Use in a polling loop to update static web pages
 ## poll() will return an integer
 ##    -1:  every 600 seconds, or
-##    >0:  there are IO activities (checked every 5 seconds)
+##    >0:  there are IO activities (checked every 10 seconds)
 while True:
-    if watcher.poll(timeout=600, step=5):
+    if watcher.poll(timeout=600, step=10):
         ## main work
         ....
 ```
@@ -48,12 +41,6 @@ watchio poll 1234 2234 --timeout 600 --step 10
 ./update_script.csh
 ```
 
-<!-
-The following kills a butch of processes that has no IO activities after 1 hour.
-``` shell
-watchio poll 1234 2234 --timeout 3600 --kill
-```
-->
 
 ## See Also
 

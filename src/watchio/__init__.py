@@ -6,8 +6,8 @@ import pathlib
 import os
 import time
 
-__version__ = "0.0.32"
-__build__ = "Fri Mar  4 23:47:28 2022 PST"
+__version__ = "0.0.38"
+__build__ = "Mon Mar  7 18:37:21 2022 PST"
 
 
 class WatchIO:
@@ -91,7 +91,7 @@ class WatchIO:
         return changes if valid else -1
 
     def __str__(self):
-        return f"<WatchIO pids={self.pids} timeout={self.timeout} step={self.step}>"
+        return f"<WatchIO pids={self.pids} timeout={self.timeout:.1f} step={self.step:.1f} check={self.check}>"
 
     # def dump(self):
     #    """Dump out current states for debugging"""

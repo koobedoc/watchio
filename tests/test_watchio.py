@@ -7,7 +7,7 @@ import sys
 
 import pytest
 
-sys.path = ["../src"] + sys.path
+sys.path = ["../src", "./src"] + sys.path # For localized test
 
 import watchio
 
@@ -16,28 +16,28 @@ def test_constructor():
     """Tests for constructor"""
 
     ## Checks defaults
-    iow = watchio.WatchIO([1])
-    assert str(iow) == "<WatchIO pids=[1] timeout=600 step=1>"
+    watcher = watchio.WatchIO([1])
+    assert str(watcher) == "<WatchIO pids=[1] timeout=600.0 step=1.0 check=False>"
 
-    iow = watchio.WatchIO([2], timeout=3456, step=7)
-    assert str(iow) == "<WatchIO pids=[2] timeout=3456 step=7>"
+    watcher = watchio.WatchIO([2], timeout=3456.7, step=7.1)
+    assert str(watcher) == "<WatchIO pids=[2] timeout=3456.7 step=7.1 check=False>"
 
 
 def test_delay():
     """Tests for delays in polling"""
 
-    iow = watchio.WatchIO([os.getpid()])
+    watcher = watchio.WatchIO([os.getpid()])
 
     print("// First time calling, poll should exit immediately")
     start_time = time.time()
-    ret = iow.poll(timeout=3)
+    ret = watcher.poll(timeout=3)
     print(f"// Returned {ret}. Elapsed = {time.time() - start_time:.3f}s")
     assert (time.time() - start_time) < 0.1
 
     print("// Now we run again. It should timeout")
-    iow.update()  ### To flush out changes print print statments
+    watcher.update()  ### To flush out changes print print statments
     start_time = time.time()
-    ret = iow.poll(timeout=0.2, step=0.1)
+    ret = watcher.poll(timeout=0.2, step=0.1)
     elapsed = time.time() - start_time
     print(f"// Returned {ret}. Elapsed = {elapsed:.3f}s")
     assert 0.2 < elapsed < 0.3
