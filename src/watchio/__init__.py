@@ -2,12 +2,16 @@
 """ watchio: Process IO watcher """
 
 import argparse
-import pathlib
 import os
+import pathlib
+import re
 import time
+import sys
 
-__version__ = "0.0.38"
-__build__ = "Mon Mar  7 18:37:21 2022 PST"
+import psutil
+
+__version__ = "0.0.39"
+__build__ = "Fri Mar 11 17:24:56 2022 PST"
 
 
 class WatchIO:
@@ -39,6 +43,19 @@ class WatchIO:
         self.procs = {}
         self.pid_self = os.getpid()
 
+    def find_pids(self, name: str) -> list:
+        """
+        Get a list of PIDs by *name*. Name can be a numerical pid or the name
+        of the process. Returns a (possibly empty) list.
+        """
+        _ = self
+        pids = []
+        for proc in psutil.process_iter(["pid", "name", "exe", "cmdline"]):
+            if (re.search(r"^\d+$", name) and name == str(proc.info["pid"])) or (name == proc.info["name"]):
+                pids.append(proc.info["pid"])
+        return pids
+        # print(p.info['pid'], p.info['name'], p.info['exe'], p.info['cmdline'])
+
     def get_io_data(self, pid: int) -> dict:
         """
         Get IO data of the `pid` process. The method reads and parses the
@@ -56,7 +73,7 @@ class WatchIO:
         data = {}
         try:
             text = pathlib.Path(filename).read_text(encoding="ascii")
-        except Exception as err:
+        except Exception as err:  # pylint: disable=broad-except
             if self.check:
                 raise err
             return None
@@ -148,7 +165,7 @@ class WatchIO:
         parser.add_argument("-v", "--verbose", action="count", default=0, help="increase verbosity for debugging")
 
         self.args = parser.parse_args()
-        if self.args.verbose:
+        if self.args.verbose > 2:
             print(self.args)
 
     @staticmethod
@@ -158,7 +175,12 @@ class WatchIO:
         self.parse_cli()
         if self.args.verbose:
             print(f"// watchio: {self}")
-        self.pids = self.args.pids
+        for pid in self.args.pids:
+            self.pids += self.find_pids(pid)
+        if not self.pids:
+            print("// No valid process to watch. Exit 1", file=sys.stderr)
+            sys.exit(1)
+
         self.poll(timeout=self.args.timeout, step=self.args.timeout, clear=True)
 
 
