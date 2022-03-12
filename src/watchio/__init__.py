@@ -10,8 +10,8 @@ import sys
 
 import psutil
 
-__version__ = "0.0.39"
-__build__ = "Fri Mar 11 17:24:56 2022 PST"
+__version__ = "0.0.40"
+__build__ = "Fri Mar 11 22:02:55 2022 PST"
 
 
 class WatchIO:
