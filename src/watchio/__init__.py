@@ -52,6 +52,8 @@ class WatchIO:
         pids = []
         for proc in psutil.process_iter(["pid", "name", "exe", "cmdline"]):
             if (re.search(r"^\d+$", name) and name == str(proc.info["pid"])) or (name == proc.info["name"]):
+                if self.args.verbose:
+                    print(f"// Watching pid '{proc.info['pid']}': {' '.join(proc.info['cmdline'])}")
                 pids.append(proc.info["pid"])
         return pids
         # print(p.info['pid'], p.info['name'], p.info['exe'], p.info['cmdline'])
